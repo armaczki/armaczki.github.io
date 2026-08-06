@@ -103,7 +103,7 @@ analytics:
 # Site Author
 author:
   name             : "Adriana Armaczki"
-  avatar           : "/assets/images/7.5.2 A.JPG"
+  avatar           : # "/assets/images/7.5.2 A.JPG"
   bio              : #"nimic de zis"
   location         : "Groningen"
   email            : #"adrianaarmaczki@gmail.com"
