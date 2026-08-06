@@ -105,7 +105,7 @@ author:
   name             : "Adriana Armaczki"
   avatar           : # path of avatar image, e.g. "/assets/images/bio-photo.jpg"
   bio              : #"nimic de zis"
-  location         : "Groningen / Ploiesti "
+  location         : "Groningen"
   email            : #"adrianaarmaczki@gmail.com"
   links:
     - label: "Email"
@@ -121,7 +121,7 @@ footer:
   links:
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
-      url: "https://www.instagram.com/_adrianaa_115//"
+      url: "https://www.instagram.com/_adrianaa_115/"
     - label: "Email"
       icon: "fas fa-fw fa-square-envelope"
       url: "mailto:adrianaarmaczki@gmail.com"
