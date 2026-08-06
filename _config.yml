@@ -125,6 +125,9 @@ footer:
     - label: "Email"
       icon: "fas fa-fw fa-square-envelope"
       url: "mailto:adrianaarmaczki@gmail.com"
+    - label: "VSCO"
+      icon: "fas fa-fw fa-vsco"
+      url: "https://adr-ia-na.vsco.site/work" 
 
 # Reading Files
 include:
