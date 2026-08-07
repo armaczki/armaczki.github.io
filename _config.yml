@@ -8,7 +8,7 @@ direction                : # "ltr" (default), "rtl" # set the direction of the p
 title                    : "ᡕᠵ╦ᡁ═━╾CZKi"
 title_separator          : "-"
 subtitle                 : # site tagline that appears below site title in masthead
-name                     : "adriana armaCZKi"
+name                     : "Adriana Armaczki"
 description              : "Description?!."
 url                      : # the base hostname & protocol for your site e.g. "https://mmistakes.github.io"
 baseurl                  : # the subpath of your site, e.g. "/blog"
@@ -108,12 +108,15 @@ author:
   location         : "Groningen"
   email            : #"adrianaarmaczki@gmail.com"
   links:
-    - label: "Email"
-      icon: "fas fa-fw fa-square-envelope"
-      # url: "mailto:your.name@email.com"
     - label: "Instagram"
       icon: "fab fa-fw fa-instagram"
-      # url: "https://instagram.com/"
+      url: "https://www.instagram.com/_adrianaa_115/"
+    - label: "Email"
+      icon: "fas fa-fw fa-square-envelope"
+      url: "mailto:adrianaarmaczki@gmail.com"
+    - label: "VSCO"
+      icon: "fas fa-fw fa-vsco"
+      url: "https://adr-ia-na.vsco.site/work" 
 
 
 # Site Footer
@@ -290,9 +293,10 @@ defaults:
       type: posts
     values:
       layout: single
-      author_profile: true
+      author_profile: false
       read_time: true
       comments: # true
       share: true
       related: true
+      footer: false
 
