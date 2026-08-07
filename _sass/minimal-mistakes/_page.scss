@@ -529,14 +529,14 @@ body {
   padding-top: 1em;
   border-top: 1px solid $border-color;
 
-  @include breakpoint($large) {
+ /* @include breakpoint($large) {
     float: inline-end;
     width: calc(100% - #{$right-sidebar-width-narrow});
   }
 
   @include breakpoint($x-large) {
     width: calc(100% - #{$right-sidebar-width});
-  }
+  }*/
 
   a {
     color: inherit;
