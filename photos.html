@@ -8,9 +8,7 @@ entries_layout: grid
 
 <html>
 <head>
-
 <style>
-
   .photo-gallery {
     width: 100vw;
     max-width: 100vw;
@@ -35,10 +33,8 @@ entries_layout: grid
   }
 
   .gallery-item {
-    flex: 1;
     min-width: 0;
     overflow: hidden;
-
     margin: 0;
     padding: 0;
     border: none;
@@ -46,10 +42,8 @@ entries_layout: grid
 
   .gallery-item img {
     display: block;
-
     width: 100%;
     height: 100%;
-
     object-fit: cover;
 
     margin: 0;
@@ -57,9 +51,7 @@ entries_layout: grid
     border: none;
   }
 
-
   @media (max-width: 600px) {
-
     .photo-gallery {
       gap: 3px;
       padding: 3px;
@@ -68,7 +60,6 @@ entries_layout: grid
     .gallery-row {
       gap: 3px;
     }
-
   }
 </style>
 
@@ -82,159 +73,191 @@ entries_layout: grid
   <img src="/assets/images/7.5.2 A.JPG" alt="">
 
   <img src="/assets/images/7.5.2 A.JPG" alt="">
-  
-  <img src="/assets/images/IMG_7674.JPG" alt="">
-
 
 </div>
 
 
 <script>
 
+document.addEventListener("DOMContentLoaded", function () {
+
   const gallery = document.getElementById("photoGallery");
 
-  const TARGET_ROW_HEIGHT = 300;
+  /*
+   * Keep the original images permanently.
+   * This prevents resize events from deleting them.
+   */
+  const images = Array.from(gallery.querySelectorAll("img"));
 
- GAP = 5;
+  const TARGET_HEIGHT = 300;
+  const GAP = 5;
 
 
-  function createGallery() {
+  function buildGallery() {
 
-    const images = Array.from(gallery.querySelectorAll(":scope > img"));
-
-    gallery.innerHTML = "";
-
-    let row = [];
-    let rowAspectRatio = 0;
-
+    /*
+     * Don't try to build until the gallery has
+     * an actual width.
+     */
     const galleryWidth = gallery.clientWidth;
 
+    if (!galleryWidth || galleryWidth < 10) {
+      return;
+    }
 
-    images.forEach((img, index) => {
 
-      const aspectRatio =
-        img.naturalWidth / img.naturalHeight;
+    /*
+     * Clear only the displayed rows.
+     */
+    gallery.innerHTML = "";
+
+
+    let row = [];
+    let aspectRatioSum = 0;
+
+
+    images.forEach(function (img, index) {
+
+      /*
+       * If an image hasn't loaded yet, use a
+       * temporary aspect ratio instead of
+       * breaking the gallery.
+       */
+      let ratio = 1;
+
+      if (img.naturalWidth && img.naturalHeight) {
+        ratio = img.naturalWidth / img.naturalHeight;
+      }
+
 
       row.push({
         img: img,
-        ratio: aspectRatio
+        ratio: ratio
       });
 
-      rowAspectRatio += aspectRatio;
+      aspectRatioSum += ratio;
 
 
       const availableWidth =
         galleryWidth -
-        GAP * (row.length - 1) -
-        10;
-
-      const calculatedHeight =
-        availableWidth / rowAspectRatio;
+        GAP * (row.length - 1);
 
 
+      const rowHeight =
+        availableWidth / aspectRatioSum;
+
+
+      /*
+       * Finish the row when it reaches the
+       * target height.
+       */
       if (
-        calculatedHeight <= TARGET_ROW_HEIGHT ||
+        rowHeight <= TARGET_HEIGHT ||
         index === images.length - 1
       ) {
 
-        const galleryRow =
+        const rowElement =
           document.createElement("div");
 
-        galleryRow.className = "gallery-row";
+        rowElement.className =
+          "gallery-row";
 
 
-        row.forEach(item => {
+        row.forEach(function (item) {
 
-          const container =
+          const itemElement =
             document.createElement("div");
 
-          container.className =
+          itemElement.className =
             "gallery-item";
 
+          itemElement.style.flex =
+            item.ratio + " 1 0";
 
-          container.style.flex =
-            `${item.ratio} 1 0%`;
-
-
-          container.style.height =
-            `${calculatedHeight}px`;
+          itemElement.style.height =
+            rowHeight + "px";
 
 
-          container.appendChild(item.img);
+          itemElement.appendChild(item.img);
 
-          galleryRow.appendChild(container);
+          rowElement.appendChild(itemElement);
 
         });
 
 
-        gallery.appendChild(galleryRow);
+        gallery.appendChild(rowElement);
 
 
         row = [];
-        rowAspectRatio = 0;
+        aspectRatioSum = 0;
       }
 
     });
 
   }
 
-  function waitForImages() {
 
-    const images =
-      Array.from(
-        gallery.querySelectorAll("img")
-      );
-
-
-    const promises =
-      images.map(img => {
-
-        if (img.complete) {
-          return Promise.resolve();
-        }
-
-        return new Promise(resolve => {
-
-          img.addEventListener(
-            "load",
-            resolve,
-            { once: true }
-          );
-
-          img.addEventListener(
-            "error",
-            resolve,
-            { once: true }
-          );
-
-        });
-
-      });
+  /*
+   * Wait for the images to load.
+   */
+  let loaded = 0;
 
 
-    Promise.all(promises)
-      .then(createGallery);
+  function imageLoaded() {
+
+    loaded++;
+
+    if (loaded === images.length) {
+      buildGallery();
+    }
 
   }
 
 
-  waitForImages();
+  images.forEach(function (img) {
 
+    if (img.complete) {
+      imageLoaded();
+    } else {
 
-  let resizeTimer;
+      img.addEventListener(
+        "load",
+        imageLoaded,
+        { once: true }
+      );
 
-  window.addEventListener("resize", () => {
+      img.addEventListener(
+        "error",
+        imageLoaded,
+        { once: true }
+      );
 
-    clearTimeout(resizeTimer);
-
-    resizeTimer = setTimeout(() => {
-      createGallery();
-    }, 150);
+    }
 
   });
 
-</script>
 
+  /*
+   * Rebuild when screen size changes.
+   *
+   * The important difference is that we use
+   * the original `images` array rather than
+   * searching the gallery again.
+   */
+  let resizeTimer;
+
+  window.addEventListener("resize", function () {
+
+    clearTimeout(resizeTimer);
+
+    resizeTimer = setTimeout(function () {
+      buildGallery();
+    }, 200);
+
+  });
+
+});
+</script>
 
 
 </body>
