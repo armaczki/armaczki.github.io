@@ -2,3 +2,258 @@
 layout: home
 author_profile: true
 ---
+<!-- RECENT POSTS--> 
+
+<html>
+<head>
+<style>
+  .photo-gallery {
+    width: 95vw;
+    max-width: 95vw;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+    padding: 5px;
+
+    box-sizing: border-box;
+  }
+
+  .gallery-row {
+    display: flex;
+    width: 100%;
+    gap: 5px;
+  }
+
+  .gallery-item {
+    min-width: 0;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  .gallery-item img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+
+    margin: 0;
+    padding: 0;
+    border: none;
+  }
+
+  @media (max-width: 600px) {
+    .photo-gallery {
+      gap: 3px;
+      padding: 3px;
+    }
+
+    .gallery-row {
+      gap: 3px;
+    }
+  }
+</style>
+
+
+<div class="photo-gallery" id="photoGallery">
+
+    <img src="/assets/images/IMG_7674.JPG" alt="">
+
+ <video  controls>
+ <source src="https://github.com/armaczki/armaczki.github.io/raw/refs/heads/master/assets/videos/0001-0600.mp4" >
+ Your browser does not support the video tag.
+ </video>
+
+ <img src="/assets/images/IMG_7674.JPG" alt="">
+</div>
+
+
+<script>
+
+document.addEventListener("DOMContentLoaded", function () {
+
+  const gallery = document.getElementById("photoGallery");
+
+  /*
+   * Keep the original images permanently.
+   * This prevents resize events from deleting them.
+   */
+  const images = Array.from(gallery.querySelectorAll("img"));
+
+  const TARGET_HEIGHT = 300;
+  const GAP = 5;
+
+
+  function buildGallery() {
+
+    /*
+     * Don't try to build until the gallery has
+     * an actual width.
+     */
+    const galleryWidth = gallery.clientWidth;
+
+    if (!galleryWidth || galleryWidth < 10) {
+      return;
+    }
+
+
+    /*
+     * Clear only the displayed rows.
+     */
+    gallery.innerHTML = "";
+
+
+    let row = [];
+    let aspectRatioSum = 0;
+
+
+    images.forEach(function (img, index) {
+
+      /*
+       * If an image hasn't loaded yet, use a
+       * temporary aspect ratio instead of
+       * breaking the gallery.
+       */
+      let ratio = 1;
+
+      if (img.naturalWidth && img.naturalHeight) {
+        ratio = img.naturalWidth / img.naturalHeight;
+      }
+
+
+      row.push({
+        img: img,
+        ratio: ratio
+      });
+
+      aspectRatioSum += ratio;
+
+
+      const availableWidth =
+        galleryWidth -
+        GAP * (row.length - 1);
+
+
+      const rowHeight =
+        availableWidth / aspectRatioSum;
+
+
+      /*
+       * Finish the row when it reaches the
+       * target height.
+       */
+      if (
+        rowHeight <= TARGET_HEIGHT ||
+        index === images.length - 1
+      ) {
+
+        const rowElement =
+          document.createElement("div");
+
+        rowElement.className =
+          "gallery-row";
+
+
+        row.forEach(function (item) {
+
+          const itemElement =
+            document.createElement("div");
+
+          itemElement.className =
+            "gallery-item";
+
+          itemElement.style.flex =
+            item.ratio + " 1 0";
+
+          itemElement.style.height =
+            rowHeight + "px";
+
+
+          itemElement.appendChild(item.img);
+
+          rowElement.appendChild(itemElement);
+
+        });
+
+
+        gallery.appendChild(rowElement);
+
+
+        row = [];
+        aspectRatioSum = 0;
+      }
+
+    });
+
+  }
+
+
+  /*
+   * Wait for the images to load.
+   */
+  let loaded = 0;
+
+
+  function imageLoaded() {
+
+    loaded++;
+
+    if (loaded === images.length) {
+      buildGallery();
+    }
+
+  }
+
+
+  images.forEach(function (img) {
+
+    if (img.complete) {
+      imageLoaded();
+    } else {
+
+      img.addEventListener(
+        "load",
+        imageLoaded,
+        { once: true }
+      );
+
+      img.addEventListener(
+        "error",
+        imageLoaded,
+        { once: true }
+      );
+
+    }
+
+  });
+
+
+  /*
+   * Rebuild when screen size changes.
+   *
+   * The important difference is that we use
+   * the original `images` array rather than
+   * searching the gallery again.
+   */
+  let resizeTimer;
+
+  window.addEventListener("resize", function () {
+
+    clearTimeout(resizeTimer);
+
+    resizeTimer = setTimeout(function () {
+      buildGallery();
+    }, 200);
+
+  });
+
+});
+</script>
+
+
+</body>
+</html>
+

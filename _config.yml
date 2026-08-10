@@ -3,10 +3,10 @@
 minimal_mistakes_skin    : "catppuccin_mocha" # "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise", "catppuccin_latte", "catppuccin_mocha"
 
 # Site Settings
-locale                   : "en-US"
+locale                   : #"en-US"
 direction                : # "ltr" (default), "rtl" # set the direction of the page
 title                    : "̸/̸̅̅ ̆̅ ̅̅ ̅̅ CZKi"
-title_separator          : "-"
+title_separator          : #"-"
 subtitle                 : # site tagline that appears below site title in masthead
 name                     : "Adriana Armaczki"
 description              : #"Description?!."
