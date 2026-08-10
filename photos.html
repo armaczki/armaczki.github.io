@@ -8,73 +8,68 @@ entries_layout: grid
 
 <html>
 <head>
+
+  ```html
 <style>
-div.gallery {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: flex-start;
-}
+  /* Gallery container */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 12px;
+    width: 100%;
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 12px;
+    box-sizing: border-box;
+  }
 
-div.gallery-item {
-  margin: 5px;
-  border: 1px solid #ccc;
-  width: 180px;
-}
+  /* Individual image */
+  .gallery img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
 
-div.gallery-item:hover {
-  border: 1px solid #777;
-}
+  /* Optional subtle VSCO-style spacing */
+  .gallery-item {
+    margin: 0;
+    padding: 0;
+  }
 
-div.gallery-item img {
-  width: 100%;
-  height: auto;
-}
-
-div.gallery-item div.desc {
-  padding: 15px;
-  text-align: center;
-}
+  /* Mobile screens */
+  @media (max-width: 600px) {
+    .gallery {
+      grid-template-columns: 1fr;
+      gap: 8px;
+      padding: 8px;
+    }
+  }
 </style>
-</head>
-<body>
 
 <div class="gallery">
 
-<div class="gallery-item">
-  <a target="_blank" href="/assets/images/IMG_7674.JPG">
+  <div class="gallery-item">
+    <img src="/assets/images/IMG_7674.JPG" alt="">
+  </div>
 
-    
-    <img src="/assets/images/IMG_7674.JPG" >
-  </a>
+  <div class="gallery-item">
+    <img src="/assets/images/IMG_7674.JPG" alt="">
+  </div>
+
+  <div class="gallery-item">
+    <img src="/assets/images/7.5.2 A.JPG" alt="">
+  </div>
+
+  <div class="gallery-item">
+    <img src="/assets/images/7.5.2 A.JPG" alt="">
+  </div>
+
 </div>
-
-<div class="gallery-item">
-  <a target="_blank" href="/assets/images/IMG_7674.JPG">
-
-    
-    <img src="/assets/images/IMG_7674.JPG"  >
-  </a>
-</div>
-
-<div class="gallery-item">
-  <a target="_blank" href="/assets/images/7.5.2 A.JPG">
-
-    
-    <img src="/assets/images/7.5.2 A.JPG" 
-    >
-  </a>
-</div>
-
-<div class="gallery-item">
-  <a target="_blank" href="/assets/images/7.5.2 A.JPG">
-
-    
-    <img src="/assets/images/7.5.2 A.JPG"  >
-  </a>
-</div>
-
-
-</div> <!-- de la gallery class asta-->
+```
 
 </body>
 </html>
