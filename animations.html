@@ -40,7 +40,7 @@ entries_layout: grid
     border: none;
   }
 
-  .gallery-item img {
+  .gallery-item video {
     display: block;
     width: 100%;
     height: 100%;
@@ -67,16 +67,17 @@ entries_layout: grid
 
 <div class="photo-gallery" id="photoGallery">
 
- <video  controls>
- <source src="https://github.com/armaczki/armaczki.github.io/raw/refs/heads/master/assets/videos/0001-0600.mp4" >
- Your browser does not support the video tag.
- </video>
-
   <video  controls>
   <source src="https://github.com/armaczki/armaczki.github.io/raw/refs/heads/master/assets/videos/0001-1000.mp4" >
   Your browser does not support the video tag.
   </video>
  
+
+ <video  controls>
+ <source src="https://github.com/armaczki/armaczki.github.io/raw/refs/heads/master/assets/videos/0001-0600.mp4" >
+ Your browser does not support the video tag.
+ </video>
+
 
 </div>
 
@@ -91,7 +92,7 @@ document.addEventListener("DOMContentLoaded", function () {
    * Keep the original images permanently.
    * This prevents resize events from deleting them.
    */
-  const images = Array.from(gallery.querySelectorAll("img"));
+  const images = Array.from(gallery.querySelectorAll("video"));
 
   const TARGET_HEIGHT = 300;
   const GAP = 5;
@@ -120,7 +121,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let aspectRatioSum = 0;
 
 
-    images.forEach(function (img, index) {
+    images.forEach(function (video, index) {
 
       /*
        * If an image hasn't loaded yet, use a
@@ -129,13 +130,13 @@ document.addEventListener("DOMContentLoaded", function () {
        */
       let ratio = 1;
 
-      if (img.naturalWidth && img.naturalHeight) {
-        ratio = img.naturalWidth / img.naturalHeight;
+      if (video.naturalWidth && video.naturalHeight) {
+        ratio = video.naturalWidth / video.naturalHeight;
       }
 
 
       row.push({
-        img: img,
+        video: video,
         ratio: ratio
       });
 
@@ -182,7 +183,7 @@ document.addEventListener("DOMContentLoaded", function () {
             rowHeight + "px";
 
 
-          itemElement.appendChild(item.img);
+          itemElement.appendChild(item.video);
 
           rowElement.appendChild(itemElement);
 
@@ -218,19 +219,19 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
 
-  images.forEach(function (img) {
+  images.forEach(function (video) {
 
-    if (img.complete) {
+    if (video.complete) {
       imageLoaded();
     } else {
 
-      img.addEventListener(
+      video.addEventListener(
         "load",
         imageLoaded,
         { once: true }
       );
 
-      img.addEventListener(
+      video.addEventListener(
         "error",
         imageLoaded,
         { once: true }
