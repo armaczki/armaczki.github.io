@@ -1,6 +1,6 @@
 ---
 layout: posts
-title: 
+title:
 permalink: /Animations/
 author_profile: false
 entries_layout: grid
@@ -8,10 +8,27 @@ entries_layout: grid
 
 <html>
 <head>
+
 <style>
-  .photo-gallery {
-    width: 90vw;
-    max-width: 95vw;
+
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+  }
+
+  .gallery-title {
+    width: 100%;
+    text-align: center;
+
+    font-size: 40px;
+    margin: 20px 0 25px 0;
+  }
+
+  .video-gallery {
+
+    width: 100vw;
+    max-width: 100vw;
 
     position: relative;
     left: 50%;
@@ -27,56 +44,102 @@ entries_layout: grid
   }
 
   .gallery-row {
+
     display: flex;
     width: 100%;
+
     gap: 5px;
   }
 
   .gallery-item {
+
     min-width: 0;
+
     overflow: hidden;
+
     margin: 0;
     padding: 0;
+
     border: none;
+
+    background: transparent;
   }
 
   .gallery-item video {
+
     display: block;
+
     width: 100%;
     height: 100%;
+
     object-fit: cover;
 
     margin: 0;
     padding: 0;
+
     border: none;
+
+    background: transparent;
   }
 
+
   @media (max-width: 600px) {
-    .photo-gallery {
+
+    .video-gallery {
+
       gap: 3px;
       padding: 3px;
     }
 
     .gallery-row {
+
       gap: 3px;
     }
+
+    .gallery-title {
+
+      font-size: 30px;
+      margin-bottom: 15px;
+    }
+
   }
+
 </style>
-<p style="font-size: 40px;" class="photo-gallery"> <b>Animations </b></p>
+
+</head>
 
 
-<div class="photo-gallery" id="photoGallery">
+<body>
 
-  <video  controls>
-  <source src="https://github.com/armaczki/armaczki.github.io/raw/refs/heads/master/assets/videos/0001-1000.mp4" >
-  Your browser does not support the video tag.
+
+<h1 class="gallery-title">
+  Animations
+</h1>
+
+
+<div class="video-gallery" id="videoGallery">
+
+  <video controls preload="metadata">
+
+    <source
+      src="https://github.com/armaczki/armaczki.github.io/raw/refs/heads/master/assets/videos/0001-1000.mp4"
+      type="video/mp4"
+    >
+
+    Your browser does not support the video tag.
+
   </video>
- 
 
- <video  controls>
- <source src="https://github.com/armaczki/armaczki.github.io/raw/refs/heads/master/assets/videos/0001-0600.mp4" >
- Your browser does not support the video tag.
- </video>
+  <video controls preload="metadata">
+
+    <source
+      src="https://github.com/armaczki/armaczki.github.io/raw/refs/heads/master/assets/videos/0001-0600.mp4"
+      type="video/mp4"
+    >
+
+    Your browser does not support the video tag.
+
+  </video>
 
 
 </div>
@@ -86,154 +149,190 @@ entries_layout: grid
 
 document.addEventListener("DOMContentLoaded", function () {
 
-  const gallery = document.getElementById("photoGallery");
 
-  /*
-   * Keep the original images permanently.
-   * This prevents resize events from deleting them.
-   */
-  const images = Array.from(gallery.querySelectorAll("video"));
+  const gallery =
+    document.getElementById("videoGallery");
+
+  const videos =
+    Array.from(
+      gallery.querySelectorAll(":scope > video")
+    );
+
 
   const TARGET_HEIGHT = 300;
-  const GAP = 5;
 
+  const GAP = 5;
 
   function buildGallery() {
 
-    /*
-     * Don't try to build until the gallery has
-     * an actual width.
-     */
-    const galleryWidth = gallery.clientWidth;
 
-    if (!galleryWidth || galleryWidth < 10) {
+    const galleryWidth =
+      gallery.clientWidth;
+
+
+    if (
+      !galleryWidth ||
+      galleryWidth < 10
+    ) {
       return;
     }
 
-
-    /*
-     * Clear only the displayed rows.
-     */
     gallery.innerHTML = "";
 
 
     let row = [];
+
     let aspectRatioSum = 0;
 
 
-    images.forEach(function (video, index) {
 
-      /*
-       * If an image hasn't loaded yet, use a
-       * temporary aspect ratio instead of
-       * breaking the gallery.
-       */
-      let ratio = 1;
+    videos.forEach(function (video, index) {
 
-      if (video.naturalWidth && video.naturalHeight) {
-        ratio = video.naturalWidth / video.naturalHeight;
+      let ratio = 16 / 9;
+
+
+      if (
+        video.videoWidth &&
+        video.videoHeight
+      ) {
+
+        ratio =
+          video.videoWidth /
+          video.videoHeight;
+
       }
 
 
       row.push({
+
         video: video,
+
         ratio: ratio
+
       });
+
 
       aspectRatioSum += ratio;
 
-
       const availableWidth =
+
         galleryWidth -
         GAP * (row.length - 1);
 
 
       const rowHeight =
-        availableWidth / aspectRatioSum;
 
+        availableWidth /
+        aspectRatioSum;
 
-      /*
-       * Finish the row when it reaches the
-       * target height.
-       */
       if (
+
         rowHeight <= TARGET_HEIGHT ||
-        index === images.length - 1
+
+        index === videos.length - 1
+
       ) {
+
 
         const rowElement =
           document.createElement("div");
+
 
         rowElement.className =
           "gallery-row";
 
 
+
         row.forEach(function (item) {
+
 
           const itemElement =
             document.createElement("div");
 
+
           itemElement.className =
             "gallery-item";
 
+
           itemElement.style.flex =
             item.ratio + " 1 0";
+
 
           itemElement.style.height =
             rowHeight + "px";
 
 
-          itemElement.appendChild(item.video);
 
-          rowElement.appendChild(itemElement);
+          itemElement.appendChild(
+            item.video
+          );
+
+
+          rowElement.appendChild(
+            itemElement
+          );
 
         });
 
 
-        gallery.appendChild(rowElement);
 
+        gallery.appendChild(
+          rowElement
+        );
 
         row = [];
+
         aspectRatioSum = 0;
+
       }
 
     });
 
   }
 
-
-  /*
-   * Wait for the images to load.
-   */
   let loaded = 0;
 
 
-  function imageLoaded() {
+  function videoReady() {
 
     loaded++;
 
-    if (loaded === images.length) {
+
+    if (
+      loaded === videos.length
+    ) {
+
       buildGallery();
+
     }
 
   }
 
 
-  images.forEach(function (video) {
 
-    if (video.complete) {
-      imageLoaded();
-    } else {
+  videos.forEach(function (video) {
+
+
+    if (
+      video.readyState >= 1
+    ) {
+
+      videoReady();
+
+    }
+
+    else {
 
       video.addEventListener(
-        "load",
-        imageLoaded,
+        "loadedmetadata",
+        videoReady,
         { once: true }
       );
 
+
       video.addEventListener(
         "error",
-        imageLoaded,
+        videoReady,
         { once: true }
       );
 
@@ -242,29 +341,36 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
 
-  /*
-   * Rebuild when screen size changes.
-   *
-   * The important difference is that we use
-   * the original `images` array rather than
-   * searching the gallery again.
-   */
   let resizeTimer;
 
-  window.addEventListener("resize", function () {
 
-    clearTimeout(resizeTimer);
+  window.addEventListener(
+    "resize",
+    function () {
 
-    resizeTimer = setTimeout(function () {
-      buildGallery();
-    }, 200);
 
-  });
+      clearTimeout(
+        resizeTimer
+      );
+
+
+      resizeTimer =
+        setTimeout(
+          function () {
+
+            buildGallery();
+
+          },
+          200
+        );
+
+    }
+  );
 
 });
+
 </script>
 
 
 </body>
 </html>
-
